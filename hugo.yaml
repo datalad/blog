@@ -1,0 +1,60 @@
+baseURL: https://blog.datalad.org/
+languageCode: en-us
+title: To be distributed...
+theme: "PaperMod"
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON # necessary for search
+
+languages:
+  en:
+    languageName: "English"
+    weight: 1
+    taxonomies:
+      category: categories
+      tag: tags
+      series: series
+    menu:
+      main:
+        - name: Archive
+          url: archives
+          weight: 5
+        - name: Search
+          url: search/
+          weight: 10
+        - name: Tags
+          url: tags/
+          weight: 10
+
+params:
+  # enable social metadata and seo
+  env: production
+
+  homeInfoParams:
+    Title: A blog on data management and DataLad
+    Content: "![A world map with DataLad minions and connected nodes](http://www.datalad.org/img/collaborate.svg)"
+
+  socialIcons:
+    - name: matrix
+      url: "https://matrix.to/#/#datalad:matrix.org"
+    - name: mastodon
+      url: "https://fosstodon.org/@datalad"
+    - name: stackoverflow
+      url: "https://neurostars.org/tag/datalad"
+    - name: github
+      url: "https://github.com/datalad"
+    - name: youtube
+      url: "https://youtube.com/datalad"
+
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    # limit: 10 # refer: https://www.fusejs.io/api/methods.html#search
+    keys: ["title", "permalink", "summary", "content"]
