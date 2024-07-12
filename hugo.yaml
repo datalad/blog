@@ -3,6 +3,17 @@ languageCode: en-us
 title: To be distributed...
 theme: "PaperMod"
 
+paginate: 5
+
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+minify:
+  disableXML: true
+  minifyOutput: true
+
 outputs:
   home:
     - HTML
@@ -30,6 +41,35 @@ languages:
           weight: 10
 
 params:
+  description: "A blog on data management and DataLad"
+  keywords:
+    - Blog
+    - DataLad,
+    - Distributed Data Management
+  # default, can be overwritten per post
+  author: DataLad team
+  DateFormat: "2006-01-02"
+  defaultTheme: auto
+  disableThemeToggle: false
+
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowWordCount: true
+  ShowRssButtonInSectionTermList: true
+  UseHugoToc: false
+  disableSpecial1stPost: false
+  disableScrollToTop: false
+  comments: false
+  hidemeta: false
+  hideSummary: false
+  # by default no table of contents shown
+  showtoc: false
+  # but if shown (enabled in individual post) expand by default
+  tocopen: true
+
   # enable social metadata and seo
   env: production
 
