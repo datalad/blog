@@ -42,8 +42,6 @@ params:
       url: "https://matrix.to/#/#datalad:matrix.org"
     - name: mastodon
       url: "https://fosstodon.org/@datalad"
-    - name: stackoverflow
-      url: "https://neurostars.org/tag/datalad"
     - name: github
       url: "https://github.com/datalad"
     - name: youtube
