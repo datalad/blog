@@ -340,6 +340,10 @@ these are per-instance and live in a SQLite database. It should be possible to
 export this information in a way that enables aggregation, and storage within
 the music repo...
 
+The relatively little information that is uniquely in Navidrome's internal data
+structures also implies a rather small potential for any vendor lock-in. If I
+want to, or need to stop using Navidrome, I just could with little impact.
+
 What remains worrisome is that there are very few places left that allow
 buying digital music -- I might need to get a CD drive again.
 
