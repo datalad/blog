@@ -1,5 +1,4 @@
 ---
-draft: true
 title: 'Self-hosted music streaming from a git-annex repository'
 date: 2024-07-18T15:27:47+02:00
 author:
