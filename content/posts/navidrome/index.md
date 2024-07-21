@@ -8,9 +8,11 @@ tags:
 - git-annex
 - music streaming
 - Navidrome
+- Raspberry Pi
+- self-hosted
 cover:
   image: cover.webp
-  alt: DataLad minions reading and climbing books to write something.
+  alt: A screen shot of the Navidrom web UI with the logos of Navidrome, Picard, git-annex, and DataLad on top of it.
   relative: true
 description: >
   No Amazon, Apple and friends: Your own music streaming with Navidrome on a Raspberry Pi5, managed with DataLad.
