@@ -59,12 +59,13 @@ you own".
 And now there is [forgejo-aneksajo](https://codeberg.org/matrss/forgejo-aneksajo),
 a Forgejo variant that adds support for git-annex 🤯.
 
-[Matthias Riße](https://codeberg.org/matrss) is behind this effort, and I have
-first heard about it at [distribits 2024](https://distribits.live) in [his
-unconference
-contribution](https://youtu.be/J14GiX1kuto?si=2FSc2OZ37VngMVrs&t=753).
-It was originally built on [Gitea](https://about.gitea.com) and continues to be
-used for the [Atmospheric Research Data Information
+[Matthias Riße](https://codeberg.org/matrss) is presently pushing this effort.
+It is based on earlier work by [Nick Guenther](https://github.com/kousu) and
+others (see https://github.com/neuropoly/gitea). I have first heard about it at
+[distribits 2024](https://distribits.live) in [his unconference
+contribution](https://youtu.be/J14GiX1kuto?si=2FSc2OZ37VngMVrs&t=753).  It was
+originally built on [Gitea](https://about.gitea.com) and continues to be used
+for the [Atmospheric Research Data Information
 System](https://atris.fz-juelich.de) (ATRIS) at [Forschungszentrum
 Jülich](https://www.fz-juelich.de/en).
 
@@ -108,7 +109,10 @@ $ wget -O ~/.docker/cli-plugins/docker-buildx \
 $ chmod +x ~/.docker/cli-plugins/docker-buildx
 ```
 
-and had `docker buildx` working. In order to be able to interact with Docker using my normal user account, I added myself to the `docker` group.
+and had `docker buildx` working. In order to be able to interact with Docker
+using my normal user account, I added myself to the `docker` group.  This
+should not be done carelessly. Members of this group have elevated permissions
+on the system.
 
 ```
 $ sudo adduser $(id -u -n) docker
@@ -117,13 +121,15 @@ $ sudo adduser $(id -u -n) docker
 From here, building the Docker image was straightforward. Clone the repository
 
 ```
-$ git clone --depth 1 git@codeberg.org:matrss/forgejo-aneksajo.git
+$ git clone git@codeberg.org:matrss/forgejo-aneksajo.git
 ```
 
 and let Docker build the image based on the included `Dockerfile`.
 
-```
+```shell
 $ cd forgejo-aneksajo
+# check out the specific version we want to build here
+$ git checkout v7.0.5-git-annex1
 $ docker buildx build --output type=docker \
     --tag forgejo-aneksajo:7.0.5-git-annex1 --tag forgejo-aneksajo:7-git-annex .
 ```
@@ -360,3 +366,5 @@ well with Forgejo-aneksajo!
     caption="Screenshot of the Forgejo-aneksajo UI (running on the Raspberry Pi) showing the source repository of this blog, and the annex'ed cover image of this post."
     alt="Browser window screenshot. Typical GitHub-like file content preview. The file is annotated with 'Stored with Git Annex'. The footer of the page reads: 'Powered by Forgejo Version: 7.0.5-it-annex1+gitea-1.21.11'."
     >}}
+
+Thanks to Adina Wagner, Christian Mönch, Yaroslav Halchenko, and Matthias Riße for providing feedback on a draft of this post.
