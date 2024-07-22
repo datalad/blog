@@ -354,3 +354,9 @@ Absolutely!
 After this first test, I will definitely keep using it at home, and will look
 into further adoption at work, and making sure that DataLad continues to work
 well with Forgejo-aneksajo!
+
+{{< figure
+    src="screenshot.webp"
+    caption="Screenshot of the Forgejo-aneksajo UI (running on the Raspberry Pi) showing the source repository of this blog, and the annex'ed cover image of this post."
+    alt="Browser window screenshot. Typical GitHub-like file content preview. The file is annotated with 'Stored with Git Annex'. The footer of the page reads: 'Powered by Forgejo Version: 7.0.5-it-annex1+gitea-1.21.11'."
+    >}}
