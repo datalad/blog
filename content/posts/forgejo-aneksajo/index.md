@@ -36,7 +36,7 @@ From the beginning, DataLad offered a [simple web UI for read-only browsing of
 datasets](https://datasets.datalad.org). But for the longest time,
 [GIN](https://gin.g-node.org) was, to my knowledge, the only complete hosting
 solution with built-in git-annex support. There is a public instance, and it
-allows for private repositories. But not all data can uploaded to this
+allows for private repositories. But not all data can be uploaded to this
 science-focused service. Although GIN is open-source (a fork of
 [Gogs](https://gogs.io)) and can be
 [self-hosted](https://gin.g-node.org/G-Node/Info/wiki/In+House), setting it up
@@ -53,7 +53,7 @@ by a
 specifically focused on keeping the software free and open-source (unlike the
 open-core models of alternatives like GitLab). Moreover, Forgejo
 is specifically aiming to be a self-hosted alternative to GitHub that offers "a
-familiar environment to GitHub users, allowing smooth transition to a platform
+familiar environment to GitHub users, allowing a smooth transition to a platform
 you own".
 
 And now there is [forgejo-aneksajo](https://codeberg.org/matrss/forgejo-aneksajo),
@@ -69,7 +69,7 @@ System](https://atris.fz-juelich.de) (ATRIS) at [Forschungszentrum
 Jülich](https://www.fz-juelich.de/en).
 
 If you are wondering, like I was: "aneksaĵo" is Esperanto for "annex", just
-like "forĝejo" is Esperato for "forge". Forgejo-aneksajo is an annex forge.
+like "forĝejo" is Esperanto for "forge". Forgejo-aneksajo is an annex forge.
 
 ## Self-hosting on a Raspberry Pi
 
@@ -90,7 +90,7 @@ contrast to Forgejo, no Docker images are readily available for
 Forgejo-aneksajo, and they need to be built.  Knowing that one can build a
 software helps to gain confidence that things can actually be fixed when there
 is a need, so self-building is fine. However, the `docker` v20 that I installed from
-the standard package sources of the Debian 12.6 (stable) on my Raspberry Pi with
+the standard package sources of Debian 12.6 (stable) on my Raspberry Pi with
 
 ```
 $ sudo apt install docker.io
@@ -216,14 +216,14 @@ After a restart of the container
 $ docker restart forgejo
 ```
 
-everything was was working, I could register a user, sign-in, create and
+everything was working, I could register a user, sign-in, create and
 interact with projects.
 
 
 ## Great!
 
 The Forgejo UI felt snappy, despite running on a Raspberry Pi. It has all the
-goodness that I am used to from GitHub an friends. Pushing, and then browsing
+goodness that I am used to from GitHub and friends. Pushing, and then browsing
 a DataLad dataset with hundreds of commits and several 10k files was fast and
 did not make Forgejo sweat (nor the Raspberry Pi).
 
@@ -235,7 +235,7 @@ remained at less than 2%.  The issue with (root) directories with many items [is
 known](https://codeberg.org/forgejo/forgejo/issues/3547).
 
 Most importantly, DataLad interoperability was instant -- no fiddling required.
-Transfer of annexed files to and from Forgejo worked fast and reliable. Forgejo
+Transfer of annexed files to and from Forgejo worked fast and reliably. Forgejo
 shows the size of a repository, including the annexed file content. I can click
 on annexed music or video files and play them directly from the Forgejo UI.
 
@@ -272,7 +272,7 @@ pull-requests](https://forgejo.org/docs/latest/user/agit-support).
 
 This is amazingly simple and useful. It allows anyone who is not interested
 in web UIs to stick to whatever Git-powered workflow they have, and still
-collaborate with people that prefer or need a graphical interface.
+collaborate with people who prefer or need a graphical interface.
 I love it!
 
 
@@ -284,8 +284,8 @@ with identity providers for single-sign-on, or storage systems.
 
 For a small home or lab deployment expectations are different.  Maintenance
 requirements should be low. There should be an "exit strategy" for when a
-solution can no longer by employed, and a migration is needed. What is
-necessary to do an effective backup?  How would disaster recovery look like?
+solution can no longer be employed, and a migration is needed. What is
+necessary to do an effective backup?  What would disaster recovery look like?
 
 The Forgejo documentation provides [instructions on doing
 backups](https://forgejo.org/docs/latest/admin/upgrade/#backup), and a look
@@ -344,9 +344,9 @@ itself is very actively developed and the enthusiasm on social media for it
 (`#forgejo`) seems substantial. Of course, the git-annex add-on by
 Forgejo-aneksajo is an independently developed smaller project that can
 hopefully be integrated with Forgejo directly, or at least attract a good number of
-contributor to ensure its continued development.
+contributors to ensure its continued development.
 
-Is the git-annex integration offered by Forgejo-aneksajo perfect already. No.
+Is the git-annex integration offered by Forgejo-aneksajo perfect already? No.
 The [issue tracker](https://codeberg.org/matrss/forgejo-aneksajo/issues)
 documents problems and opportunities. But does it work?
 Absolutely!
