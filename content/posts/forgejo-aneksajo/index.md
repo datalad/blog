@@ -9,6 +9,7 @@ tags:
 - DataLad
 - Raspberry Pi
 - self-hosted
+- Git hosting
 cover:
   image: cover.png
   alt: A screenshot of a tutorial repository with a video showing, and the Forgejo, git-annex, and DataLad logos on top.
@@ -31,10 +32,12 @@ LFS](https://git-lfs.com) it got
 really no match for git-annex data logistics, so none of the big hosting solutions
 offer any help here.
 
-For the longest time, [GIN](https://gin.g-node.org) was, to my knowledge, the
-only hosting solution with built-in git-annex support. There is a public
-instance, and it allows for private repositories. But not all data can uploaded
-to this science-focused service. Although GIN is open-source (a fork of
+From the beginning, DataLad offered a [simple web UI for read-only browsing of
+datasets](https://datasets.datalad.org). But for the longest time,
+[GIN](https://gin.g-node.org) was, to my knowledge, the only complete hosting
+solution with built-in git-annex support. There is a public instance, and it
+allows for private repositories. But not all data can uploaded to this
+science-focused service. Although GIN is open-source (a fork of
 [Gogs](https://gogs.io)) and can be
 [self-hosted](https://gin.g-node.org/G-Node/Info/wiki/In+House), setting it up
 isn't so straightforward either, and its development has not kept up with Gogs
@@ -59,7 +62,7 @@ a Forgejo variant that adds support for git-annex 🤯.
 [Matthias Riße](https://codeberg.org/matrss) is behind this effort, and I have
 first heard about it at [distribits 2024](https://distribits.live) in [his
 unconference
-contribution](https://www.youtube.com/watch?v=J14GiX1kuto&list=PLEQHbPfpVqU6esVrgqjfYybY394XD2qf2&index=28).
+contribution](https://youtu.be/J14GiX1kuto?si=2FSc2OZ37VngMVrs&t=753).
 It was originally built on [Gitea](https://about.gitea.com) and continues to be
 used for the [Atmospheric Research Data Information
 System](https://atris.fz-juelich.de) (ATRIS) at [Forschungszentrum
@@ -267,12 +270,15 @@ work with a thousand datasets, no separate API token, etc. Just push-to-create.
 Forgejo even extends this approach to the [creation of
 pull-requests](https://forgejo.org/docs/latest/user/agit-support).
 
-This is amazingly simple and useful. I love it!
+This is amazingly simple and useful. It allows anyone who is not interested
+in web UIs to stick to whatever Git-powered workflow they have, and still
+collaborate with people that prefer or need a graphical interface.
+I love it!
 
 
 ## Behind the curtain
 
-When running a large or institutional deployment, a certainly complexity
+When running a large or institutional deployment, a certain complexity
 of a service setup is to be expected, for example from integrations
 with identity providers for single-sign-on, or storage systems.
 
@@ -337,7 +343,7 @@ the push-to-create feature.  The risk of adoption also feels low. Forgejo
 itself is very actively developed and the enthusiasm on social media for it
 (`#forgejo`) seems substantial. Of course, the git-annex add-on by
 Forgejo-aneksajo is an independently developed smaller project that can
-hopefully be migrated to Forgejo directly, or at least attract a good number of
+hopefully be integrated with Forgejo directly, or at least attract a good number of
 contributor to ensure its continued development.
 
 Is the git-annex integration offered by Forgejo-aneksajo perfect already. No.
@@ -345,6 +351,6 @@ The [issue tracker](https://codeberg.org/matrss/forgejo-aneksajo/issues)
 documents problems and opportunities. But does it work?
 Absolutely!
 
-After this first test, I will definitely keep using it at home, and will
-look into further adoption at work, and making sure that DataLad works well
-with Forgejo-aneksajo!
+After this first test, I will definitely keep using it at home, and will look
+into further adoption at work, and making sure that DataLad continues to work
+well with Forgejo-aneksajo!
