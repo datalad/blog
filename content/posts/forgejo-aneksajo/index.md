@@ -11,7 +11,7 @@ tags:
 - self-hosted
 - Git hosting
 cover:
-  image: cover.png
+  image: cover.webp
   alt: A screenshot of a tutorial repository with a video showing, and the Forgejo, git-annex, and DataLad logos on top.
   relative: true
 description: >
