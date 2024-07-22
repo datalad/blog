@@ -22,7 +22,7 @@ straightforward thing in the world. Sure, through the power of
 [git-annex](https://git-annex.branchable.com), and with the help of a range of
 [DataLad extension
 packages](https://github.com/datalad/datalad-extensions?tab=readme-ov-file#datalad-extensions-status)
-they can be put pretty much anywhere. But that it is possible does not imply simplicity.
+they can be put pretty much anywhere. But the fact that it is possible does not imply simplicity.
 
 There used to be a time when [GitLab](https://about.gitlab.com) supported
 git-annex repositories directly. But with the arrival of [Git
@@ -66,7 +66,7 @@ System](https://atris.fz-juelich.de) (ATRIS) at [Forschungszentrum
 Jülich](https://www.fz-juelich.de/en).
 
 If you are wondering, like I was: "aneksaĵo" is Esperanto for "annex", just
-like "forĝejo" is Esperato for "forge. Forgejo-aneksajo is an annex forge.
+like "forĝejo" is Esperato for "forge". Forgejo-aneksajo is an annex forge.
 
 ## Self-hosting on a Raspberry Pi
 
@@ -252,7 +252,7 @@ to the `app.ini` configuration file, and restarted the Docker container.
 
 Now I can go to any repository or DataLad dataset, add a remote and push
 immediately -- no required interaction with the web UI whatsoever. This means that
-the commands.
+the commands
 
 ```
 $ git remote add pididdy ssh://git@git.pididdy.local:2222/mih/mydataset.git
