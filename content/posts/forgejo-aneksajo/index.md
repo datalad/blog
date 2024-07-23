@@ -75,7 +75,7 @@ like "forĝejo" is Esperanto for "forge". Forgejo-aneksajo is an annex forge.
 ## Self-hosting on a Raspberry Pi
 
 My aims were similar to that of my setup for [self-hosted music streaming
-from a DataLad dataset](posts/navidrome)). I want everything to run on my
+from a DataLad dataset](posts/navidrome). I want everything to run on my
 series 5 [Raspberry Pi](https://en.wikipedia.org/wiki/Raspberry_Pi). Ideally,
 it would run as an additional service, and due to its low requirements not
 require its own machine. I was hoping for the setup complexity to be minimal.
