@@ -29,7 +29,7 @@ That was more than 13 years ago, and till today I continue to use the very same 
     >}}
 
 I still have a clone on my laptop. I had others on machines like the small box
-plugged into the wall with speakers connected and runnning
+plugged into the wall with speakers connected and running
 [mpd](https://www.musicpd.org). I was doing git-annex things: getting and
 dropping music from my laptop, making sure I had at least one copy on a
 backup-drive, pushing music where `mpd` could see it, etc.
@@ -61,7 +61,7 @@ I could self-host, to not have the machine idle all day long.
 
 That is how I stumbled upon [Navidrome](https://www.navidrome.org) (GPLv3), a
 music streaming server that is
-[advertized](https://www.navidrome.org/docs/overview/#features) as "very low
+[advertised](https://www.navidrome.org/docs/overview/#features) as "very low
 resource usage" and specifically labeled for running on a Raspberry Pi.
 Although there are [many
 alternatives](https://github.com/basings/selfhosted-music-overview), what made
