@@ -497,6 +497,10 @@ After=network-online.target
 
 [Container]
 ContainerName=container-forgejo
+# image to use for the container
+# if the image is not available locally already, it is pulled, so
+# something like the following is also possible
+#Image=docker.io/mihanke/forgejo-aneksajo:7-latest-rootless
 Image=localhost/forgejo-aneksajo:7-latest-rootless
 PublishPort=3000:3000
 Volume=%h/gitea:/var/lib/gitea:Z
