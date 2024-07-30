@@ -10,7 +10,7 @@ tags:
 - podman
 - systemd
 cover:
-  image: cover.png
+  image: cover.webp
   alt: A screenshot of `systemd status` for a container process, and the Forgejo, podman, and systemd logos on top.
   relative: true
 description: >
