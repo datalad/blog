@@ -372,7 +372,7 @@ systemctl --user stop container-forgejo
 
 (executed as the `git` user).
 
-## Finalize service configuration
+### Finalizing
 
 Initializing the Forgejo instance has created a default configuration at
 `/etc/forgejo/app.ini`, which is already sensible, but can be tuned further. A
