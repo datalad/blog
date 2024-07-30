@@ -11,10 +11,10 @@ tags:
 - systemd
 cover:
   image: cover.png
-  alt: TODO
+  alt: A screenshot of `systemd status` for a container process, and the Forgejo, podman, and systemd logos on top.
   relative: true
 description: >
-  TODO
+  Run Forgejo as a containerized service in user-space with SSH-passthrough on the host.
 showToc: true
 ---
 
@@ -57,8 +57,8 @@ In the following, I will describe an approach to deploying Forgejo that
 - uses systemd to start, stop, and monitor the service
 - exposes the service via a reverse proxy configuration (like
   `https://git.example.com`)
-- uses "SSH pass-through" to avoid running a Forgejo-internal SSH server
-  and having to expose it in addition to an SSH server that may already run
+- uses "SSH-passthrough" to avoid running a Forgejo-internal SSH server
+  and having to expose it in addition to an SSH server that is already run
   on the host
 - builds the [Forgejo-aneksajo](https://codeberg.org/matrss/forgejo-aneksajo)
   container image from source, but otherwise only uses tools that are
@@ -72,17 +72,29 @@ improvements of the systemd integration from version 4.4 onwards. In
 anticipation of a future upgrade (Debian 13 is likely to ship with podman v5),
 we will also be taking a brief look at these new features.
 
+
+## Software dependencies
+
+For the setup described here, we need the following packages (all available via
+`apt install` from Debian) in addition to systemd -- which is assumed to be
+available already.
+
+- `podman` to build and run containers
+- `caddy` to serve as a [reverse proxy](https://en.wikipedia.org/wiki/Reverse_proxy)
+  for Forgejo. Any other solution, say [nginx](https://nginx.org/en), should work too,
+  but is not described here.
+
 ## User setup
 
 As a first step, we will create a dedicated `git` user on the target system.
 This user will not only run the Forgejo service, but it will also be means to
 provide SSH-based access to it, through the host system.
 
-For clarity, I will perform all steps from a normal user account on the target
-machine, and use `sudo` whenever elevated permissions are needed.
+For clarity, we will perform all setup steps from a normal user account on the
+target machine, and use `sudo` whenever elevated permissions are needed.
 
-I am creating a regular (non-system) `git` user, and I am planing to put all
-Forgejo data under `/home/git`, so I can use `adduser` as simple as:
+We are creating a regular (non-system) `git` user, planing to put all
+Forgejo data under `/home/git`, so we can use `adduser` as simple as:
 
 ```sh
 sudo adduser git --disabled-password
@@ -117,7 +129,7 @@ git:265536:65536
 
 We plan to run the container as the `git` user, via systemd. This requires that
 systemd is running a controlling process for this user, even when the user is not
-logged in. This is achieved via systemd's "user lingering":
+logged in. This is achieved via systemd's [user lingering](https://www.freedesktop.org/software/systemd/man/247/loginctl.html#enable-linger%20USER%E2%80%A6):
 
 ```sh
 sudo loginctl enable-linger git
@@ -170,10 +182,12 @@ sudo chmod +x /etc/forgejo/bin/forgejo-shell
 sudo usermod --shell /etc/forgejo/bin/forgejo-shell git
 ```
 
-The second key aspect of the SSH-passthrough setup is to relay access authorization
-for the `git` user to Forgejo in the container. For that, we place a configuration
-drop-in into the host's `sshd` configuration, calling `gitea keys` inside the
-container.
+The second key aspect of the SSH-passthrough setup is to relay access
+authorization for the `git` user to Forgejo in the container. For that, we
+place a configuration drop-in into the host's `sshd` configuration, calling
+[gitea keys](https://docs.gitea.com/administration/command-line#keys) inside
+the container to act as an
+[AuthorizedKeysCommand](https://man.openbsd.org/sshd_config#AuthorizedKeysCommand).
 
 ```sh
 cat << EOT | sudo tee /etc/ssh/sshd_config.d/forgejo-ssh-passthrough.conf
@@ -192,13 +206,13 @@ sudo systemctl restart sshd
 ### Reverse-proxy setup
 
 Eventually, the Forgejo container will run and offer http access via port `3000`.
-We will tell podman to expose this port also on the hosts port `3000`. This makes
+We will tell podman to expose this port also on the host's port `3000`. This makes
 Forgejo accessible via `http://localhost:3000`, or whatever hostname identifies the
 machine.
 
-However, it would be much nicer to be able to use something like
+However, we want to have proper HTTPS and use something like
 `https://git.example.com`, where `example.com` is replaced with whatever your
-domain is. This is easily achieved with [Caddy](https://caddyserver.com),
+domain is. This is (most) easily achieved with [Caddy](https://caddyserver.com),
 including automated certificate generation for `https`.
 
 First point your domain DNS configuration for host `git` to the server's (IP)
@@ -212,6 +226,8 @@ git.example.com {
     reverse_proxy localhost:3000
 }
 ```
+
+Caddy with provising the necessary certificate automatically.
 
 ### Build the Forgejo image
 
@@ -241,8 +257,8 @@ podman build \
 ```
 
 The `podman build` call points to `Dockerfile.rootless`. This is important.
-The "rootless" container setup works substantially different than the
-normal one. Only the "rootless" setup is covered here!
+The "rootless" container setup works substantially different compared to the
+regular one. Only the "rootless" setup is covered here!
 
 
 ### Initial Forgejo launch
@@ -257,10 +273,17 @@ remove these permissions again.
 sudo chown git: /etc/forgejo
 ```
 
+We could also immediately deposit a complete configuration at
+`/etc/forgejo/app.ini`. However, the initial configuration wizard will pick up
+some environment properties (this is the reason why we configured caddy
+already), and yield a functional setup that needs minimal adjustment.  It will
+also produce a configuration suitable for the deployed Forgejo version, even
+some time in the future for a different Forgejo release.
+
 The following script will ready the environment for Forgejo,
 create a container, generate a systemd service unit for it,
 and start the container (via systemd) for the first time.
-All if this is done with the `git` user.
+All of this is done with the `git` user.
 
 A couple of things are important:
 
@@ -268,6 +291,8 @@ A couple of things are important:
   Forgejo instance related information separate from the Git
   repositories host by that instance. The latter will just be a
   standard collection of bare Git repositories (with an annex).
+- we bind the host's configuration at `/etc/forgejo` to the location
+  Forgejo expects in the container
 - the name of the container is set to `forgejo`, while the
   corresponding systemd service is called `container-forgejo`.
 - the `forgejo` container will only expose port `3000` for http(s)
@@ -275,8 +300,8 @@ A couple of things are important:
 - we map the `git` user on the host system to the `git` user inside
   the container (it has `uid=1000`), such that any files created by
   it within the container, are owned by the use running the container
-  on the host. In other words, all file created will be owned by
-  `git` on the host.
+  on the host. In other words, all files created will be owned by
+  the `git` user on the host.
 
 ```sh
 # the following code runs as the `git` user
@@ -317,7 +342,7 @@ systemctl --user start container-forgejo
 If this looks a bit clunky to you, you are not alone with this opinion, and you'll be glad that starting with podman version 4.4+ [this can be done much nicer](#setup-with-podman-v44-and-later).
 
 For podman v4.3, we create a container, similar to what would need to be done
-with Docker, only to generate a systemd service unit from the setup.
+with Docker, but only to generate a systemd service unit from the setup.
 Afterwards, we can immediately remove the container again, because the service
 unit will create a new one, each time it starts (`--new`). Take a look at the
 `.service` file generated in `.config/systemd/user/`. In case something does
@@ -329,7 +354,8 @@ With the reverse-proxy setup done as described above, go to
 `https://git.example.com` (replacing `example.com` with your domain).  This
 will bring up the setup wizard. All values can be kept at their default to
 configure a Forgejo instance that uses SQLite as a database. A setup with a
-dedicated database server/container is out of scope for this article.
+dedicated database server/container is out of scope for this article. That being said,
+a podman "pod" would be a suitable vehicle to implement this.
 
 Now push the button to initialize the Forgejo instance, which will populate the
 `gitea/` directory in the `git` user's home directory.
@@ -396,7 +422,7 @@ sudo chmod 640 /etc/forgejo/app.ini
 We make the configuration file writeable by `root` only, and readable by the
 `git` group (the main group of the `git` user) only. This prevents modification
 of the configuration by the user that runs the Forgejo service, and also makes
-adding secrets to the configuration file slightly more secure.  Adding secret
+adding secrets to the configuration file slightly more secure.  Adding a secret
 may be necessary for setting up email SMTP server access.
 
 At this point, and as the `git` user, we can tell systemd to launch the
@@ -480,7 +506,7 @@ WantedBy=default.target
 EOT
 ```
 
-The content shown above roughly matches the container setup I used before. It looks
+The content shown above roughly matches the container setup we used before. It looks
 like a service unit specification and can use all of systemd's features (templating, placeholders, etc.). Only the `[Container]` is specific to this quadlet.
 
 This quadlet makes any direct use of podman commands shown above fully
