@@ -411,7 +411,7 @@ SSH_PORT = 22
 With the SSH-passthrough configuration targeted here, we can disabled Forgejo's
 internal SSH server entirely. However, we do *not* want to disable its SSH
 features entirely! Setting the `SSH_PORT` to the standard `22` causes Forgejo
-to stop putting a custom port into the SSH URLs it displayes. This is
+to stop putting a custom port into the SSH URLs it displays. This is
 important, because SSH-access is happening via the SSH server running on the
 host, on that port `22`.
 
