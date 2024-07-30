@@ -106,7 +106,7 @@ this user account via something like (replace `example.com` with the target
 host address):
 
 ```sh
-podman image scp localhost/forgejo-aneksajo:7-git-annex git@example.com::
+podman image scp localhost/forgejo-aneksajo:7-latest-rootless git@example.com::
 ```
 
 But for this article, we will be building the container directly on the target
@@ -229,10 +229,19 @@ git.example.com {
 
 Caddy with provising the necessary certificate automatically.
 
-### Build the Forgejo image
+### Obtain a Forgejo-aneksajo container image
 
-Unless a suitable Forgejo container image is already available, the following
-script can be used to build one. Importantly, we will build it directly
+For the moment, images for a recent version are available from [Docker
+Hub](https://hub.docker.com/r/mihanke/forgejo-aneksajo) (for architectures
+`amd64` and `arm64`). Get one via, for example
+
+```sh
+podman pull docker.io/mihanke/forgejo-aneksajo:7-rootless-latest
+```
+
+However, if you do not have a want an account on Docker Hub, or a good enough
+version is not available (yet), it is straightforward to build one from source.
+The following script does exactly that. Importantly, we will build the image directly
 with the `git` user.
 
 ```sh
@@ -251,8 +260,8 @@ systemctl --user status
 
 # build the image
 podman build \
-  --tag forgejo-aneksajo:7.0.5-git-annex1 \
-  --tag forgejo-aneksajo:7-git-annex \
+  --tag forgejo-aneksajo:7.0.5-rootless \
+  --tag forgejo-aneksajo:7-latest-rootless \
   -f ~/src/forgejo-aneksajo/Dockerfile.rootless
 ```
 
@@ -322,7 +331,7 @@ podman container create \
   -v "$HOME/git:/var/lib/gitea/git:Z" \
   -v '/etc/forgejo:/etc/gitea:Z' \
   --userns 'keep-id:uid=1000,gid=1000' \
-  localhost/forgejo-aneksajo:7-git-annex
+  localhost/forgejo-aneksajo:7-latest-rootless
 
 # generate a systemd service unit from the container
 mkdir -p ~/.config/systemd/user
@@ -488,7 +497,7 @@ After=network-online.target
 
 [Container]
 ContainerName=container-forgejo
-Image=localhost/forgejo-aneksajo:7-git-annex
+Image=localhost/forgejo-aneksajo:7-latest-rootless
 PublishPort=3000:3000
 Volume=%h/gitea:/var/lib/gitea:Z
 Volume=%h/git:/var/lib/gitea/git:Z
