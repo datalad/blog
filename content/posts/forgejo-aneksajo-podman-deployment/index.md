@@ -400,8 +400,11 @@ SSH_PORT = 22
 ```
 
 With the SSH-passthrough configuration targeted here, we can disabled Forgejo's
-internal SSH server entirely. However, we do *not* want to disable its SSH features
-entirely!
+internal SSH server entirely. However, we do *not* want to disable its SSH
+features entirely! Setting the `SSH_PORT` to the standard `22` causes Forgejo
+to stop putting a custom port into the SSH URLs it displayes. This is
+important, because SSH-access is happening via the SSH server running on the
+host, on that port `22`.
 
 ```
 [service]
@@ -518,4 +521,20 @@ systemd's dependency management.
 
 ## Conclusions
 
-TODO
+The setup describe here is a lot nicer than [the one I created
+originally](/posts/forgejo-aneksajo). Not only are all software dependencies
+outside the container coming from Debian directly, but also the integration
+with the host system is much better. The containerized Forgejo service
+is managed by systemd in the same way all other services are managed.
+Forgejo runs under a non-privileged host account, and the SSH-access via that
+`git` user feels just like one is used to from GitHub/Lab and friends.
+
+I will likely revisit the Forgejo setup again when it is time to deploy [a
+runner for its
+actions](https://forgejo.org/docs/latest/admin/actions/#forgejo-runner). But
+for now I am rather happy how this turned out.
+
+One could argue that it is no less difficult to understand enough of systemd to
+be able to do this, than would be for Docker. However, I think investing the
+learning into systemd has benefits well beyond the world of containers. It was
+well worth the time for me.
