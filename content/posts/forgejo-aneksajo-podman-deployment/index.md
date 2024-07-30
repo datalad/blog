@@ -1,6 +1,6 @@
 ---
 title: "Deploying and managing Forgejo-aneksajo with podman and systemd"
-date: 2023-07-30T12:28:11+02:00
+date: 2024-07-31T08:00:00+02:00
 author:
 - Michael Hanke
 tags:
