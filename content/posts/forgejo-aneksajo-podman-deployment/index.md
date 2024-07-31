@@ -138,6 +138,27 @@ sudo loginctl enable-linger git
 This will also cause a working directory for the `git` user to be available
 at `/run/user/$UID`.
 
+This directory must be "announced" via the `XDG_RUNTIME_DIR` environment
+variable for systemd to work properly for a user. To have that happen
+automatically, put the following snippet into the `git` user's shell setup.
+
+```sh
+if [ -z "${XDG_RUNTIME_DIR}" ]; then
+  XDG_RUNTIME_DIR=/run/user/$(id -u)
+  export XDG_RUNTIME_DIR
+fi
+```
+
+Depending on the shell that is being used (e.g., after running `sudo -u git -s`
+from a different user account), it would need to go into something like
+`/home/git/.zshenv` for [zsh](https://www.zsh.org), or `/home/git/.bashrc` for
+[bash](https://www.gnu.org/software/bash/manual/bash.html). Importantly, do *not*
+put it in any of the "profile" files. Those are for login shells, and we won't be
+using those for this purpose.
+
+In this article, I will nevertheless show `export` commands for `XDG_RUNTIME_DIR`
+whenever they are needed. A reader that did the above setup can safely ignore them.
+
 ## Service configuration
 
 I want all configuration for the Forgejo setup to be underneath `/etc`, such
