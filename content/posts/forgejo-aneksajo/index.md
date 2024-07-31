@@ -74,6 +74,9 @@ like "forĝejo" is Esperanto for "forge". Forgejo-aneksajo is an annex forge.
 
 ## Self-hosting on a Raspberry Pi
 
+> Also check out [this follow-up post](/posts/forgejo-aneksajo-podman-deployment)
+for a podman/system-based deployment, entirely in user-space.
+
 My aims were similar to that of my setup for [self-hosted music streaming
 from a DataLad dataset](posts/navidrome). I want everything to run on my
 series 5 [Raspberry Pi](https://en.wikipedia.org/wiki/Raspberry_Pi). Ideally,
@@ -367,4 +370,5 @@ well with Forgejo-aneksajo!
     alt="Browser window screenshot. Typical GitHub-like file content preview. The file is annotated with 'Stored with Git Annex'. The footer of the page reads: 'Powered by Forgejo Version: 7.0.5-it-annex1+gitea-1.21.11'."
     >}}
 
+----
 Thanks to Adina Wagner, Christian Mönch, Yaroslav Halchenko, and Matthias Riße for providing feedback on a draft of this post.

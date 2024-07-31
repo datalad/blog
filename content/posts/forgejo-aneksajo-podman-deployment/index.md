@@ -1,6 +1,6 @@
 ---
 title: "Deploying and managing Forgejo-aneksajo with podman and systemd"
-date: 2024-07-31T08:00:00+02:00
+date: 2024-07-31T12:09:00+02:00
 author:
 - Michael Hanke
 tags:
@@ -257,7 +257,7 @@ Hub](https://hub.docker.com/r/mihanke/forgejo-aneksajo) (for architectures
 `amd64` and `arm64`). Get one via, for example
 
 ```sh
-podman pull docker.io/mihanke/forgejo-aneksajo:7-rootless-latest
+podman pull docker.io/mihanke/forgejo-aneksajo:7-latest-rootless
 ```
 
 However, if you do not have a want an account on Docker Hub, or a good enough
@@ -572,3 +572,7 @@ One could argue that it is no less difficult to understand enough of systemd to
 be able to do this, than would be for Docker. However, I think investing the
 learning into systemd has benefits well beyond the world of containers. It was
 well worth the time for me.
+
+----
+
+Thanks to Adina Wagner, and Matthias Riße for providing feedback on a draft of this post.
