@@ -183,7 +183,7 @@ podman run \
     --instance <FORGEJO-SITE-URL>
 ```
 
-The above command bindmount both runtime directory and configration directory
+The above command bindmount both runtime directory and configuration directory
 in the container.  Passing the `--config` flag to `forgejo-runner register` is
 essential here.
 
@@ -239,7 +239,7 @@ systemctl --user enable container-forgejo-runner
 ```
 
 When visiting the Forgejo runner listing in the site administration web UI
-again, the new runner should now be listed and labled as "idle". Try setting up
+again, the new runner should now be listed and labeled as "idle". Try setting up
 a test action now, and see if it runs successfully.
 
 If everything works, we can remove write access to the runner configuration
