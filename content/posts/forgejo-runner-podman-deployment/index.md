@@ -397,8 +397,12 @@ simultaneously running tasks (one by default), the maximum runtime of a task
 can be configured, and other aspects can be configured -- allowing for a large
 degree of customization.
 
-Lastly, any number of runners can be registered at a Forgejo instance, and they
-need not be online all the time.
+On top of that comes all the traffic caused by, for example, installing custom
+software dependencies during action runs. It can make a lot of sense to provide
+more tailored environments via container images to make this step leaner and
+faster.  Something like `debian-bookwork-with-gitannex`. Podman can pull such
+images from many places, including a Forgejo instance's package system. More on
+that in a future article.
 
 
 ## Conclusions
