@@ -152,6 +152,11 @@ sed -e 's,file: .runner,file: .registration,' -e 's,docker_host:.*$,docker_host:
   -i /etc/forgejo-runner/runner.yaml
 ```
 
+Depending on the host's network setup, it may be necessary (or desirable) to
+adjust the `container.network` setting in this file. This can be set to `host`,
+`bridge`, or the name of of a specific network. If left empty (default) a custom,
+container-specific network is created automatically.
+
 Next, we can create the directory where the runner will place all its runtime
 data.
 
