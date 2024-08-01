@@ -15,6 +15,7 @@ cover:
   relative: true
 description: >
   TODO
+showToc: true
 ---
 
 This article is part three of a series on self-hosting
@@ -248,6 +249,121 @@ again.
 ```sh
 sudo chown -R root: /etc/forgejo-runner
 ```
+
+## Making (GitHub) actions work
+
+A big question remains: How special are Forgejo actions? People coming from
+GitHub may have heavily invested into an action setup. Would it need to be
+redone from scratch? Or is there some kind of migration path? We know that
+Forgejo actions "are not and will never be identical". But how close are they?
+
+Let's look at a concrete example: the [`codespell` action for this blog on
+GitHub](https://github.com/datalad/blog/blob/main/.github/workflows/codespell.yml).
+
+```yaml
+name: Codespell
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  codespell:
+    name: Check for spelling errors
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Annotate locations with typos
+        uses: codespell-project/codespell-problem-matcher@v1
+      - name: Codespell
+        uses: codespell-project/actions-codespell@v2
+```
+
+This is a fairly simple action. But then, many real-world actions are not much more
+complicated than this.
+
+When pushed to a Forgejo project with enabled actions, Forgejo will actually try
+to run the action, even though it is declared at
+`.github/workflows/codespell.yml` and not `.forgejo/workflows/codespell.yml`.
+But the action won't run, because there is no runner for `ubuntu-latest`, which the
+action declares it needs to run on.
+
+This could be fixed by "forking" the action to
+`.forgejo/workflows/codespell.yml` and replacing `ubuntu-latest` with a
+supported platform. As can be seen from the screenshot above, the runner we
+create has the label `docker`, and this is what `runs-on` is matched against.
+
+However, we can also just make our runner support `ubuntu-latest` too! All it takes
+is adding any additional environments to `/etc/forgejo-runner/runner.yaml`, like so:
+
+```yaml
+…
+runner:
+  …
+  labels:
+    - "docker:docker://node:20-bookworm"
+    # we add this one to be somewhat compatible with Github, but stick with Debian
+    - "ubuntu-latest:docker://node:20-bookworm"
+```
+
+After a restart
+
+```sh
+sudo -u forgejo-runner -s systemctl --user restart container-forgejo-runner
+```
+
+this will make the runner support both `docker` and `ubuntu-latest`, and the `codespell`
+action will start.
+
+If you look carefully, the configuration maps the environment label to a
+container that podman can obtain and launch. Both labels map to
+`docker://node:20-bookworm`, which is the [Debian 12 based Node.js container on
+Docker
+Hub](https://hub.docker.com/_/node/tags?page=&page_size=&ordering=&name=20-bookworm).
+So `ubuntu-latest` is a bit of a misnomer in this case. But the mapping could
+be anything, also to an Ubuntu image, and also to any place podman can reach --
+not just Docker Hub. A single runner can support different environemts
+simulatenously.
+
+With this change the action will start now, but it will fail, even when there
+are no typos.
+
+The reason for that is that a `uses:` declaration like
+`codespell-project/codespell-problem-matcher@v1` only makes sense for a
+monolithic platform like GitHub. Somehow this identifier needs to be
+turned into a URL that the action runner can clone from.
+
+Now, Forgejo support a `DEFAULT_ACTIONS_URL`
+[configuration](https://forgejo.org/docs/next/admin/actions/#default-actions-url),
+but it points to `https://code.forgejo.org` and not `https://github.com` for
+very good reasons (read its documentation!), and one should think hard whether
+to change that. The alternative is to just put a full URL to begin with:
+
+```diff
+       - name: Checkout
+         uses: actions/checkout@v4
+       - name: Annotate locations with typos
+-        uses: codespell-project/codespell-problem-matcher@v1
++        uses: "https://github.com/codespell-project/codespell-problem-matcher@v1"
+       - name: Codespell
+-        uses: codespell-project/actions-codespell@v2
++        uses: "https://github.com/codespell-project/actions-codespell@v2"
+```
+
+And with this change, the actions runs and succeeds -- after fixing the typos ;-)
+
+{{< figure
+    src="action-success.png"
+    caption="TODO"
+    alt="TODO"
+    >}}
 
 ## Conclusions
 
