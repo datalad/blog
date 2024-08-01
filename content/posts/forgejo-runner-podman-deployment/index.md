@@ -11,10 +11,10 @@ tags:
 - systemd
 cover:
   image: cover.webp
-  alt: TODO
+  alt: A screenshot of Forgejo action runner status and result page, with the Forgejo, podman, and systemd logos on top.
   relative: true
 description: >
-  TODO
+  Add a containerized action runner to Forgejo that eases migration from GitHub actions.
 showToc: true
 ---
 
@@ -364,6 +364,42 @@ And with this change, the actions runs and succeeds -- after fixing the typos ;-
     caption="TODO"
     alt="TODO"
     >}}
+
+## Under the hood
+
+How much ressources such a runner consumes will obviously depend on its usage.
+Much of the storage demands will come from the involved container images
+
+```console
+$ sudo -u forgejo-runner -s podman images
+REPOSITORY                                          TAG          IMAGE ID      CREATED       SIZE
+docker.io/library/act-https---github-com-codespell… latest       cfa572bc5fa8  14 hours ago  58.7 MB
+docker.io/library/node                              20-bookworm  1a8e51cfa7a5  7 days ago    1.12 GB
+docker.io/library/python                            3.8-alpine   3d4312379930  3 weeks ago   49.6 MB
+code.forgejo.org/forgejo/runner                     3.5.0-amd64  526f5a8fe9df  7 weeks ago   38.6 MB
+```
+
+A comparatively smaller chunk will be the runner cache with the clones of the used actions.
+
+```console
+$ du -sh /home/forgejo-runner/runner/.*
+17M     /home/forgejo-runner/runner/.cache
+4.0K    /home/forgejo-runner/runner/.registration
+
+$ du -sh /home/forgejo-runner/runner/.cache/act/*
+15M     /home/forgejo-runner/runner/.cache/act/actions-checkout@v4
+804K    /home/forgejo-runner/runner/.cache/act/https---github.com-codespell-project-actions-codespell@v2
+212K    /home/forgejo-runner/runner/.cache/act/https---github.com-codespell-project-codespell-problem-matcher@v1
+```
+
+Via the configuration at `/etc/forgejo-runner/runner.yaml` the number of
+simultaneously running tasks (one by default), the maximum runtime of a task
+can be configured, and other aspects can be configured -- allowing for a large
+degree of customization.
+
+Lastly, any number of runners can be registered at a Forgejo instance, and they
+need not be online all the time.
+
 
 ## Conclusions
 
