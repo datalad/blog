@@ -329,8 +329,8 @@ Docker
 Hub](https://hub.docker.com/_/node/tags?page=&page_size=&ordering=&name=20-bookworm).
 So `ubuntu-latest` is a bit of a misnomer in this case. But the mapping could
 be anything, also to an Ubuntu image, and also to any place podman can reach --
-not just Docker Hub. A single runner can support different environemts
-simulatenously.
+not just Docker Hub. A single runner can support different environments
+simultaneously.
 
 With this change the action will start now, but it will fail, even when there
 are no typos.
@@ -367,16 +367,16 @@ And with this change, the actions runs and succeeds -- after fixing the typos ;-
 
 ## Under the hood
 
-How much ressources such a runner consumes will obviously depend on its usage.
+How much resources such a runner consumes will obviously depend on its usage.
 Much of the storage demands will come from the involved container images
 
 ```console
 $ sudo -u forgejo-runner -s podman images
-REPOSITORY                                          TAG          IMAGE ID      CREATED       SIZE
-docker.io/library/act-https---github-com-codespell… latest       cfa572bc5fa8  14 hours ago  58.7 MB
-docker.io/library/node                              20-bookworm  1a8e51cfa7a5  7 days ago    1.12 GB
-docker.io/library/python                            3.8-alpine   3d4312379930  3 weeks ago   49.6 MB
-code.forgejo.org/forgejo/runner                     3.5.0-amd64  526f5a8fe9df  7 weeks ago   38.6 MB
+REPOSITORY                                          TAG          IMAGE ID   CREATED       SIZE
+docker.io/library/act-https---github-com-codespell… latest       cfa572bc5  14 hours ago  58.7 MB
+docker.io/library/node                              20-bookworm  1a8e51cfa  7 days ago    1.12 GB
+docker.io/library/python                            3.8-alpine   3d4312379  3 weeks ago   49.6 MB
+code.forgejo.org/forgejo/runner                     3.5.0-amd64  526f5a8fe  7 weeks ago   38.6 MB
 ```
 
 A comparatively smaller chunk will be the runner cache with the clones of the used actions.
