@@ -9,6 +9,7 @@ tags:
 - Git hosting
 - podman
 - systemd
+- workflows
 cover:
   image: cover.webp
   alt: A screenshot of Forgejo action runner status and result page, with the Forgejo, podman, and systemd logos on top.
@@ -43,13 +44,14 @@ instance.  We will, again, use the podman-plus-systemd approach from [the
 previous post](/posts/forgejo-aneksajo-podman-deployment/) on setting up
 Forgejo itself in this way. The outcome will be a containerized runner service,
 completely in user space. This runner deployment could be on the same machine
-that Forgejo runs on, or an entirely different one.
+that Forgejo runs on, or an entirely different one, as long as the runner can
+reach the Forgejo instance via HTTP(S).
 
 I will focus on the essential steps to get a runner up and talking to Forgejo.
 I will not cover every aspect of configuration runners or using actions. The
-[Actions Administrator guide](https://forgejo.org/docs/latest/admin/actions/)
- and the [Actions User guide](https://forgejo.org/docs/latest/user/actions/)
-cover this in depth.
+[actions administrator guide](https://forgejo.org/docs/latest/admin/actions/)
+ and the [actions user guide](https://forgejo.org/docs/latest/user/actions/)
+cover this in more depth.
 
 ## Target setup
 
@@ -74,7 +76,7 @@ and the Debian packages of `podman`, and `crun` -- just `apt install` them.
 sudo apt install podman crun
 ```
 
-Podman v4.3 (as in the current Debian 12) is fine. Later version also work, and
+Podman v4.3 (as in the current Debian 12) is fine. Later versions also work, and
 can even provide [a nicer service
 setup](/posts/forgejo-aneksajo-podman-deployment/#setup-with-podman-v44-and-later).
 The "lightweight OCI runtime" `crun` is needed, because podman will/might use
@@ -142,7 +144,7 @@ podman run \
 This configuration is basically ready-to-go. However, to work with podman,
 we must adjust the `docker_host` setting (to not be empty). Moreover,
 I dislike the runner registration file to be call `.runner`. There are
-way to many things called "runner" already, so I will name it `.registration`.
+way to many things called "runner" already, so we will name it `.registration`.
 The following `sed` call makes these changes.
 
 ```sh
@@ -150,7 +152,7 @@ sed -e 's,file: .runner,file: .registration,' -e 's,docker_host:.*$,docker_host:
   -i /etc/forgejo-runner/runner.yaml
 ```
 
-Now we can create the directory where the runner will place all its runtime
+Next, we can create the directory where the runner will place all its runtime
 data.
 
 ```sh
@@ -162,11 +164,11 @@ obtained via the site administration web UI, as shown in the following screensho
 
 {{< figure
     src="gettoken.webp"
-    caption="TODO"
-    alt="TODO"
+    caption="How to find the runner registration token in the site adminstration interface."
+    alt="Screen shows a sidebar on the left, with an 'Actions' menu item (marked with a '1'), a submenu item 'Runners' (marked with '2'), and a button 'Create new runner' on the top-right of the image (marked with a '3')."
     >}}
 
-Push the "Create new runner button" and replace `<TOKEN>` in the following command
+Push the "Create new runner button" and replace `<YOUR-TOKEN>` in the following command
 with the displayed secret. You also need to invent a name for the new runner
 (`<NAME-OF-RUNNER>`), and point it to your Forgejo site.
 
@@ -179,12 +181,12 @@ podman run \
   forgejo-runner register \
     --config config/runner.yaml \
     --no-interactive \
-    --token vADHNZjinRNTC0fStzLV3zTrjgo4H9KSCC8JiEGJ \
+    --token <YOUR-TOKEN> \
     --name <NAME-OF-RUNNER> \
     --instance <FORGEJO-SITE-URL>
 ```
 
-The above command bindmount both runtime directory and configuration directory
+The above command bindmounts both runtime directory and configuration directory
 in the container.  Passing the `--config` flag to `forgejo-runner register` is
 essential here.
 
@@ -290,7 +292,7 @@ This is a fairly simple action. But then, many real-world actions are not much m
 complicated than this.
 
 When pushed to a Forgejo project with enabled actions, Forgejo will actually try
-to run the action, even though it is declared at
+to run this action, even though it is declared at
 `.github/workflows/codespell.yml` and not `.forgejo/workflows/codespell.yml`.
 But the action won't run, because there is no runner for `ubuntu-latest`, which the
 action declares it needs to run on.
@@ -298,7 +300,7 @@ action declares it needs to run on.
 This could be fixed by "forking" the action to
 `.forgejo/workflows/codespell.yml` and replacing `ubuntu-latest` with a
 supported platform. As can be seen from the screenshot above, the runner we
-create has the label `docker`, and this is what `runs-on` is matched against.
+created has the label `docker`, and this is what `runs-on` is matched against.
 
 However, we can also just make our runner support `ubuntu-latest` too! All it takes
 is adding any additional environments to `/etc/forgejo-runner/runner.yaml`, like so:
@@ -360,9 +362,9 @@ to change that. The alternative is to just put a full URL to begin with:
 And with this change, the actions runs and succeeds -- after fixing the typos ;-)
 
 {{< figure
-    src="action-success.png"
-    caption="TODO"
-    alt="TODO"
+    src="action-success.webp"
+    caption="Result report of a successful `codespell` action run, as provided by the Forgejo web UI."
+    alt="The screenshot shows numerous green checkmarks for the commit 'Fix typos', the action 'Check for spelling errors', and all 5 individual steps of the action, including 'Codespell', and 'Complete job'"
     >}}
 
 ## Under the hood
@@ -407,4 +409,12 @@ that in a future article.
 
 ## Conclusions
 
-TODO
+Setting up a runner for Forgejo actions is a fairly straightforward task.
+Being able to run it under a regular user account makes it easier to lock
+down what resources are available to a runner. Of course, this does not
+imply that it is a good idea to accept arbitrary tasks from a Forgejo
+instance that anyone can sign up to.
+
+Having at least one runner available, though, makes a big difference.
+It connects a Forgejo instance to a whole universe of automated tasks
+that goes well beyond just software testing.
