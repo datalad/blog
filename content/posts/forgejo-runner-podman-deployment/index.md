@@ -175,7 +175,9 @@ obtained via the site administration web UI, as shown in the following screensho
 
 Push the "Create new runner button" and replace `<YOUR-TOKEN>` in the following command
 with the displayed secret. You also need to invent a name for the new runner
-(`<NAME-OF-RUNNER>`), and point it to your Forgejo site.
+(`<NAME-OF-RUNNER>`), and point it to your Forgejo site. The name here is the name
+which will be displayed with the runner registration on the site. If your site
+will use more than one runner, pick a name that identifies this one appropriately.
 
 ```sh
 podman run \
@@ -221,8 +223,11 @@ podman run \
   forgejo-runner --config /data/config/runner.yaml daemon
 ```
 
-This time we also bind the podman socket and announce it in the container. Again,
-Passing the `--config` flag to `forgejo-runner` is essential.
+This time the `name` is the name of the local container, which won't be visible
+on the Forgejo site. If you plan on having more than one runner on this
+machine, maybe for multiple Forgejo instances, pick a name that identifies the
+container appropriately. We also bind the podman socket and announce it in the
+container. Again, Passing the `--config` flag to `forgejo-runner` is essential.
 
 Now we generate the service unit, and can dispose of the container afterwards.
 
