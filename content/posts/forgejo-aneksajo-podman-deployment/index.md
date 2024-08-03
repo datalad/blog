@@ -254,7 +254,7 @@ Caddy with provising the necessary certificate automatically.
 
 For the moment, images for a recent version are available from [Docker
 Hub](https://hub.docker.com/r/mihanke/forgejo-aneksajo) (for architectures
-`amd64` and `arm64`). Get one via, for example
+`amd64` and `arm64`). Get one as the `git` user via, for example
 
 ```sh
 podman pull docker.io/mihanke/forgejo-aneksajo:7-latest-rootless
@@ -332,6 +332,12 @@ A couple of things are important:
   it within the container, are owned by the use running the container
   on the host. In other words, all files created will be owned by
   the `git` user on the host.
+- many more aspects can be configured here, for example, a network setup.
+  Adding an option like `--network=slirp4netns:allow_host_loopback=true`
+  to `podman container create` would allow the forgejo container to access
+  the host's loopback network interface. This would enable the
+  built-in email functionality to use a host's SMTP server to send email
+  via an institutional relay server.
 
 ```sh
 # the following code runs as the `git` user
@@ -369,7 +375,9 @@ podman rm forgejo
 systemctl --user start container-forgejo
 ```
 
-If this looks a bit clunky to you, you are not alone with this opinion, and you'll be glad that starting with podman version 4.4+ [this can be done much nicer](#setup-with-podman-v44-and-later).
+If this looks a bit clunky to you, you are not alone with this opinion, and
+you'll be glad that starting with podman version 4.4+ [this can be done much
+nicer](#setup-with-podman-v44-and-later).
 
 For podman v4.3, we create a container, similar to what would need to be done
 with Docker, but only to generate a systemd service unit from the setup.
