@@ -1,0 +1,50 @@
+---
+name: Hugo build
+
+defaults:
+  run:
+    shell: sh
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  hugo-build:
+    name: Hugo site build
+    runs-on: hugo-latest
+
+    steps:
+      - name: Checkout
+        uses: https://bits.ngln.eu/mih/datalad-clone-action@main
+      - name: Generate site
+        run: |
+          # this should (eventually be done by datalad-clone-action)
+          git submodule update --init --recursive
+          hugo
+      - name: Package site
+        run: tar -cvzf site.tar.gz -C public .
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build-archive
+          path: site.tar.gz
+
+  hugo-upload-package:
+    name: HTML tarball deposit
+    needs: [hugo-build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/download-artifact@v3
+      - name: Replace HTML deposit
+        run: |
+          # delete any previous version, but be ok if there is none
+          curl --show-error --silent \
+            --user mih:${{ secrets.PKG_UPLOAD_TOKEN }} \
+            -X DELETE \
+            https://bits.ngln.eu/api/packages/mih/generic/blog.datalad.org-html/latest/site.tar.gz \
+          || true
+          curl --show-error --silent \
+            --user mih:${{ secrets.PKG_UPLOAD_TOKEN }} \
+            --upload-file build-archive/site.tar.gz \
+            https://bits.ngln.eu/api/packages/mih/generic/blog.datalad.org-html/latest/site.tar.gz
