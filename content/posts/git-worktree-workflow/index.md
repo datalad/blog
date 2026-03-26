@@ -484,3 +484,14 @@ Here is the destilled recipe for the workflow:
 8. Repeat 3-7 for the next iteration
 
 Happy analyzing! 🧠
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+### **Epilogue:** What happened since
+
+A few developments worth sharing since the original post:
+
+**Nested worktrees made easy.** The manual `git worktree add` dance for every subdataset was the most tedious part of this workflow. I've since created [datalad-worktree](https://github.com/just-meng/datalad-worktree), a DataLad extension that automates the creation and management of nested worktrees across an entire superdataset hierarchy.
+
+**Containers and development can coexist.** I lamented that using a container would mean rebuilding it with every code change. Turns out that's not true at all — you can bind-mount your code into the container and use it as a development environment directly. This [container-venv overlay example](https://myyoda.github.io/principles-examples/examples/container-venv-overlay-development/) shows exactly how. The trade-off diagram from above? It collapses nicely when bind-mounts enter the picture.
+
+**Jujutsu's secret superpower for worktrees.** In the original workflow I used the `runs` branch to track `master` and shuttle updates to the worktree. Git can do this too. But what if I don't want to touch `master` — say I'm developing a new feature and dedicate a worktree for execution while `master` stays put? With Git I'd be forced to develop inside the worktree itself: a separate IDE project, extra overhead keeping track of where I'm editing what. The root cause is that Git entangles "which revision is checked out" with "which branch name points here". Jujutsu decouples the two — yet another separation of concerns that would make YODA proud. Bookmarks are just labels: I develop freely without touching any branch, then `jj bookmark set runs -r <change>` points the worktree at the right commit. No merge, no checkout, no temp branches. I filed [a request for git-annex support in Jujutsu](https://github.com/jj-vcs/jj/issues/9157) — if that lands, this entire workflow could live natively in jj's world.
