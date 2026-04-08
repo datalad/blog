@@ -280,15 +280,17 @@ the **git-annex branch**.
 Every time `datalad run` produces an annexed file,
 git-annex records its location on a shared `git-annex` branch —
 and this branch is shared across all worktrees.
-So even with multiple worktrees,
-concurrent annex updates still collide.
+So **even with multiple worktrees,
+concurrent annex updates still collide**.
 
-For full parallelism, separate **ephemeral clones** are needed —
+To achieve parallelism, separate **ephemeral clones** are needed —
 throw-away clones that share the annex object store,
 but each have their own index and their own `git-annex` branch.
 This is the approach described in the
 [FAIRly big processing workflow](https://www.nature.com/articles/s41597-022-01163-2).
-For less production-ready workflows that may be overkill.
+For less production-ready workflows like the one presented here that may be overkill.
+(If you would like to contribute a follow-up blog post on parallelization of Snakemake
+workflows in a git-annex repo, you are most welcome!)
 
 Even so, Snakemake still provides its core value — staleness detection and
 automatic chaining — which is why I'm here in the first place.
