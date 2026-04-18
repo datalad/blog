@@ -1,6 +1,6 @@
 ---
 title: "Snakemake + DataLad + Worktrees: Automated Pipelines with Provenance Tracking"
-date: 2026-03-30T12:00:00+02:00
+date: 2026-04-18T12:00:00+02:00
 author:
 - Jiameng Wu
 tags:
