@@ -5,3 +5,4 @@ resources
 .cache
 .local
 .npm
+.idea

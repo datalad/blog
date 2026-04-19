@@ -30,8 +30,24 @@ hideSummary: false
 ### **Prelude:** Scientist in a data labyrinth
 As experimental neuroscientist in training, I often find myself caught between two worlds: the messy, exploratory world of data analysis where I try to make sense of the experimental data, often relying on a trial-and-error strategy, and the aspired structured, reproducible world of scientific publication where hopefully every figure will be exactly reproducible. Between these worlds lies a labyrinth of processing pipelines, half-written scripts, and the ever-present risk of breaking the working analysis while trying to improve it. The wandering in the labyrinth is rarely straight-forward -- one is expected to hit many dead ends and discover other interesting distractions before finding the actual treasure -- the key results that hopefully lead to a scientific publication or other forms of consolidated knowledge piece. I try to illustrate this metaphoric labyrinth that is my non-metaphoric reality in a diagram: 
 
-[![](https://mermaid.ink/img/pako:eNqFlMGOmzAQhl_F8mpvkxTbEAKqVmJLDjlUipRWapfswYBJ0BKIjFE3jfIUvfbp-iR1MCQkW205MZ6Zb37PwBxwUqUC-3gt-W6DvoSrEulnGS2TXJQqr9UzGo0eUBiFXPFn4w3bowWNFrJKRF3n5Ro9dr4FbZ0BjYKSF_s6r9H3zhUY13IezUslpKiVTvwYyw8Poa4jeaIq2YUu52g0bmtcU9mF-tRTmVHz9TFaNHGRJ1zlVYn-_P7VBVxpJkPNQa-ZGDq50L_1dOMKZyQKBU_RrEz7JsxIp5FcU-jVbcMZfZtJTWZo5JnT-3u0VPtC6-rtpOB1HYoM1U1ykrzgaoOyvCj8O-7G3GOgu1a9iLOZVEUl_bssTuM4M5R3GDFNPWGdGZ3ZMZyJG0_JGyVlJbe8GEAyL_bc7AzpzH9A3kG0ci8IY3aIJHEp9YaD7NSgJYSwIBAQ0JOAU08v5EFJE0chYKA_kWEbhkEGFNCeBfoDHOJMrB7Oy2lGAllAwIEJummeMUc_8lRtfLZ7vU2jwMCFKXhACBCKbtr2v3QbiC7M0M3Yb9OgCxilvN5wKfneJxZiyEEMg_7R8xT7GS9qAXgr9B1PNj6ciq2w2oitWGFfv6Yi402hVnhVHnXejpdPVbXFvpKNzpRVs96cOc0u5UqEOddrZHs-laJMhfxUNaXCvs1c0lKwf8Cv2iZjanuUEtdh3sSaTADv9anNxq4zpa41tSeEWvYR8M-2rDX2CHWIRRl1pjadMsAizfXK-GwWWLvHjn8BN-hyRQ?type=png)](https://mermaid.live/edit#pako:eNqFlMGOmzAQhl_F8mpvkxTbEAKqVmJLDjlUipRWapfswYBJ0BKIjFE3jfIUvfbp-iR1MCQkW205MZ6Zb37PwBxwUqUC-3gt-W6DvoSrEulnGS2TXJQqr9UzGo0eUBiFXPFn4w3bowWNFrJKRF3n5Ro9dr4FbZ0BjYKSF_s6r9H3zhUY13IezUslpKiVTvwYyw8Poa4jeaIq2YUu52g0bmtcU9mF-tRTmVHz9TFaNHGRJ1zlVYn-_P7VBVxpJkPNQa-ZGDq50L_1dOMKZyQKBU_RrEz7JsxIp5FcU-jVbcMZfZtJTWZo5JnT-3u0VPtC6-rtpOB1HYoM1U1ykrzgaoOyvCj8O-7G3GOgu1a9iLOZVEUl_bssTuM4M5R3GDFNPWGdGZ3ZMZyJG0_JGyVlJbe8GEAyL_bc7AzpzH9A3kG0ci8IY3aIJHEp9YaD7NSgJYSwIBAQ0JOAU08v5EFJE0chYKA_kWEbhkEGFNCeBfoDHOJMrB7Oy2lGAllAwIEJummeMUc_8lRtfLZ7vU2jwMCFKXhACBCKbtr2v3QbiC7M0M3Yb9OgCxilvN5wKfneJxZiyEEMg_7R8xT7GS9qAXgr9B1PNj6ciq2w2oitWGFfv6Yi402hVnhVHnXejpdPVbXFvpKNzpRVs96cOc0u5UqEOddrZHs-laJMhfxUNaXCvs1c0lKwf8Cv2iZjanuUEtdh3sSaTADv9anNxq4zpa41tSeEWvYR8M-2rDX2CHWIRRl1pjadMsAizfXK-GwWWLvHjn8BN-hyRQ)
-
+```mermaid
+graph TD
+    S[Scientist] --> D[Data]
+    D --> P2[Process B]
+    P2 --> A2[Analysis Y]
+    A2 --> SI[Interesting<br/>Distractor]
+    SI -.-> P2
+    P2 --> A3[Analysis Z]
+    A3 --> PUB[Publication ✓]
+    
+    D --> P1[Process A]
+    P1 --> A1[Analysis X]
+    A1 --> DE1[Dead End]
+    DE1 -.-> P1
+    P1 --> A2
+    A2 --> DE2[Dead End]
+    DE2 -.-> D 
+```
 So how do I navigate this mess? Ideally, I can (1) keep track of all my all tiny and big successes and failures, (2) do so without blowing up the project with unnecessary redundancy, (3) reuse or combine elements of (pre-)processing and analysis in different ways, (4) and (re-)visit and abandon or recover any state at any given time. In short, I want to experiment freely and safely in the space that is spanned by the data and the available (meaningful) manipulations without compromising reproducibility or creating unnecessary overheads.
 
 ### **Introduction:** Better modular than regular
