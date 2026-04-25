@@ -20,8 +20,9 @@ description: >
 One of the challenges that I've experienced when attempting to replicate the execution of data analysis is quite simply that information regarding the required resources is sparse.
 For example, when submitting a SLURM job, how does one know the wallclock time to request, much less memory and CPU resources?
 
-To solve this problem we at the [Center for Open
-Neuroscience](https://centerforopenneuroscience.org) have created a new tool, `con-duct` aka
+To solve this problem, inspired and based on [brainlife.io's smon](https://github.com/brainlife/abcd-spec/blob/master/hooks/smon) and
+our [ReproMan](https://github.com/ReproNim/reproman),
+we at the [Center for Open Neuroscience](https://centerforopenneuroscience.org) have created a new tool, `con-duct` aka
 `duct` to easily collect this information.
 When combined with `datalad-run`, `duct` collects crucial runtime information for future replication
 and reuse. 
